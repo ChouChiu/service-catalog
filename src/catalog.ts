@@ -1,4 +1,6 @@
 import { EXCLUDED, OVERRIDES } from "../config/community.ts";
+import { GROUPS, NAMES } from "../config/meta.ts";
+import { iconFor } from "./icons.ts";
 
 export const ADGUARD_URL = "https://adguardteam.github.io/HostlistsRegistry/assets/services.json";
 export const COMMUNITY_REPO = "blackmatrix7/ios_rule_script";
@@ -69,6 +71,15 @@ export function clashToAdblock(text: string): string[] {
   return [...out];
 }
 
+const GROUP_OF = new Map<string, string>();
+for (const [group, dirs] of Object.entries(GROUPS)) {
+  for (const dir of dirs) {
+    const known = GROUP_OF.get(dir);
+    if (known) throw new Error(`config/meta.ts: ${dir} is in both ${known} and ${group}`);
+    GROUP_OF.set(dir, group);
+  }
+}
+
 /** `TencentVideo` -> `tencentvideo`; IDs from OVERRIDES win */
 export function communityId(dir: string): string {
   return OVERRIDES[dir]?.id ?? dir.toLowerCase().replace(/[^a-z0-9]+/g, "");
@@ -89,12 +100,11 @@ export function communityCatalog(lists: { dir: string; text: string }[]): Catalo
     const clash = seen.get(id);
     if (clash) throw new Error(`community lists ${clash} and ${dir} share the ID ${id}`);
     seen.set(id, dir);
-    const override = OVERRIDES[dir];
     services.push({
       id,
-      name: override?.name ?? dir,
-      group: override?.group ?? "other",
-      icon: "",
+      name: OVERRIDES[dir]?.name ?? NAMES[dir] ?? dir,
+      group: GROUP_OF.get(dir) ?? "other",
+      icon: iconFor(dir, id),
       rules,
     });
   }

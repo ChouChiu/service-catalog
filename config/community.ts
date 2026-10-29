@@ -63,21 +63,21 @@ export const EXCLUDED = new Set([
 
 /**
  * Services cf-dns shipped before this catalog existed. Their IDs are stored in profiles, so they
- * must not change; names and groups are kept as they were
+ * must not change; their names are kept as they were
  */
-export const OVERRIDES: Record<string, { id: string; name: string; group: string }> = {
-  DouYin: { id: "douyin", name: "抖音", group: "social_network" },
-  KuaiShou: { id: "kuaishou", name: "快手", group: "social_network" },
-  BaiDuTieBa: { id: "baidu_tieba", name: "百度贴吧", group: "social_network" },
-  Pinduoduo: { id: "pinduoduo", name: "拼多多", group: "shopping" },
-  JingDong: { id: "jd", name: "京东", group: "shopping" },
-  MeiTuan: { id: "meituan", name: "美团", group: "shopping" },
-  Youku: { id: "youku", name: "优酷", group: "streaming" },
-  TencentVideo: { id: "tencent_video", name: "腾讯视频", group: "streaming" },
-  HunanTV: { id: "mango_tv", name: "芒果TV", group: "streaming" },
-  NetEaseMusic: { id: "netease_music", name: "网易云音乐", group: "streaming" },
-  KugouKuwo: { id: "kugou_kuwo", name: "酷狗 / 酷我", group: "streaming" },
-  HuYa: { id: "huya", name: "虎牙", group: "streaming" },
-  Douyu: { id: "douyu", name: "斗鱼", group: "streaming" },
-  HoYoverse: { id: "hoyoverse", name: "米哈游", group: "gaming" },
+export const OVERRIDES: Record<string, { id: string; name: string }> = {
+  DouYin: { id: "douyin", name: "抖音" },
+  KuaiShou: { id: "kuaishou", name: "快手" },
+  BaiDuTieBa: { id: "baidu_tieba", name: "百度贴吧" },
+  Pinduoduo: { id: "pinduoduo", name: "拼多多" },
+  JingDong: { id: "jd", name: "京东" },
+  MeiTuan: { id: "meituan", name: "美团" },
+  Youku: { id: "youku", name: "优酷" },
+  TencentVideo: { id: "tencent_video", name: "腾讯视频" },
+  HunanTV: { id: "mango_tv", name: "芒果TV" },
+  NetEaseMusic: { id: "netease_music", name: "网易云音乐" },
+  KugouKuwo: { id: "kugou_kuwo", name: "酷狗 / 酷我" },
+  HuYa: { id: "huya", name: "虎牙" },
+  Douyu: { id: "douyu", name: "斗鱼" },
+  HoYoverse: { id: "hoyoverse", name: "米哈游" },
 };

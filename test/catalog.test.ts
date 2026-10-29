@@ -33,17 +33,27 @@ describe("community catalog", () => {
     expect(communityId("Assassin'sCreed")).toBe("assassinscreed");
   });
 
-  it("drops lists without domain rules and names overrides", () => {
+  it("drops lists without domain rules and adds names, groups and icons", () => {
     const catalog = communityCatalog([
       { dir: "DouYin", text: "DOMAIN-SUFFIX,douyin.com" },
       { dir: "AmazonIP", text: "IP-CIDR,1.2.3.0/24" },
       { dir: "GitHub", text: "DOMAIN-SUFFIX,github.com" },
+      { dir: "XieCheng", text: "DOMAIN-SUFFIX,ctrip.com" },
+      { dir: "Atomdata", text: "DOMAIN-SUFFIX,atomdata.test" },
     ]);
     expect(catalog.license).toBe("GPL-2.0");
-    expect(catalog.services).toEqual([
-      { id: "douyin", name: "抖音", group: "social_network", icon: "", rules: ["||douyin.com^"] },
-      { id: "github", name: "GitHub", group: "other", icon: "", rules: ["||github.com^"] },
+    expect(catalog.services.map(({ id, name, group }) => ({ id, name, group }))).toEqual([
+      { id: "douyin", name: "抖音", group: "social_network" },
+      { id: "github", name: "GitHub", group: "developer" },
+      { id: "xiecheng", name: "携程", group: "travel" },
+      { id: "atomdata", name: "Atomdata", group: "other" },
     ]);
+    const [douyin, github, xiecheng] = catalog.services;
+    expect(douyin?.rules).toEqual(["||douyin.com^"]);
+    // Configured slug (TikTok's icon for Douyin), a name match, and no match
+    expect(douyin?.icon).toContain("<title>TikTok</title>");
+    expect(github?.icon).toContain("<title>GitHub</title>");
+    expect(xiecheng?.icon).toBe("");
   });
 
   it("rejects two lists with one ID", () => {
