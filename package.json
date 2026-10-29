@@ -1,0 +1,17 @@
+{
+  "name": "service-catalog",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "bun run src/index.ts",
+    "build": "tsc --noEmit",
+    "test": "bun test",
+    "lint": "biome check src/ test/ config/",
+    "lint:fix": "biome check --write src/ test/ config/"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^1.9.4",
+    "@types/bun": "latest",
+    "typescript": "^5.7.3"
+  }
+}

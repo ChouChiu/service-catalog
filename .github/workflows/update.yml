@@ -1,0 +1,60 @@
+name: Update catalog
+
+on:
+  schedule:
+    - cron: "30 3 * * *"
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - "config/**"
+      - "src/**"
+      - "package.json"
+      - "bun.lock"
+
+concurrency:
+  group: update-catalog
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - run: bun install --frozen-lockfile
+
+      - name: Lint, type check and test
+        run: |
+          bun run lint
+          bun run build
+          bun run test
+
+      - name: Build catalog
+        run: bun run start
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Commit changes
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add output/
+          if ! git diff --staged --quiet; then
+            git commit -m "chore(catalog): update $(date -u +'%Y-%m-%d %H:%M UTC') [skip ci]"
+            git push
+          else
+            echo "Catalog unchanged."
+          fi
